@@ -1,14 +1,33 @@
-import React from 'react'
-import Navbar from './components/Navbar'
-import Header from './components/Header'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import Footer from "./components/Footer.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Loader from "./components/Loader.jsx";
+import Header from "./components/Header.jsx"
 
-const App = () => {
+// lazy loading the components
+const Home = lazy( () => import( "./pages/Home.jsx" )); 
+const Cart = lazy( () => import( "./pages/Cart.jsx" )); 
+const Search = lazy( () => import( "./pages/Search.jsx" )); 
+
+
+const AppLayout = () => {
   return (
-    <div>
+    <Router>
       <Navbar />
       <Header />
-    </div>
-  )
-}
+      <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/search" element={<Search />} />
+      </Routes>
+      </Suspense>
+     
+      <Footer />
+    </Router>
+  );
+};
 
-export default App
+export default AppLayout;
