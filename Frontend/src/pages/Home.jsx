@@ -12,9 +12,9 @@ const Home = () => {
 
 
   return (
-    <div className='home w-screen h-auto'>
+    <div className='home '>
       <section>
-        {/* <Carousel /> */}
+        <Carousel />
       </section>
 
 
@@ -27,9 +27,11 @@ const Home = () => {
           </p>
         </Link>
       </h1>
-
-      <main className='w-screen flex gap-4 overflow-auto'>
-        <ProductCard 
+    
+    <div className='flex justify-center'>
+      
+    <main className='w-full  flex  gap-4 '>
+        <ProductCard
         productId={'mac'}
         price={199999} 
         stock={5} 
@@ -37,6 +39,8 @@ const Home = () => {
         handler={addToCartHandler} 
         photo="https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg"  />
       </main>
+      
+    </div>
       
     </div>
   )
