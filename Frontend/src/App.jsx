@@ -10,18 +10,24 @@ import Header from "./components/Header.jsx"
 const Home = lazy( () => import( "./pages/Home.jsx" )); 
 const Cart = lazy( () => import( "./pages/Cart.jsx" )); 
 const Search = lazy( () => import( "./pages/Search.jsx" )); 
-
+const Shipping = lazy( () => import( "./pages/Shipping.jsx"));
 
 const AppLayout = () => {
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <Header />
       <Suspense fallback={<Loader />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/search" element={<Search />} />
+
+        {/* login user routes  */}
+        <Route path="/shipping" element={<Shipping />} />
+
+
+
       </Routes>
       </Suspense>
      
