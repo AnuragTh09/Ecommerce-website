@@ -2,11 +2,12 @@ import React from "react";
 import { IoLogoGithub } from "react-icons/io";
 import { FaLinkedin } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import '../index.css'
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="footer text-gray-600 body-font fixed bottom-0 w-full h-auto bg-white border-t border-gray-200">
+    <div className="footer-container  ">
+      <footer className="footer text-gray-600 body-font fixed-bottom w-full h-auto bg-white border border-gray-200">
         <div className="container p-6 mx-auto flex items-center sm:flex-row flex-col">
           <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
             <svg
@@ -15,7 +16,7 @@ const Footer = () => {
               strokeLinecap="round" // Changed to camelCase
               strokeLinejoin="round" // Changed to camelCase
               strokeWidth="2" // Changed to camelCase
-              className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
+              className="w-10 h-10 text-white p-2 bg-gray-800 rounded-full"
               viewBox="0 0 24 24"
             >
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
