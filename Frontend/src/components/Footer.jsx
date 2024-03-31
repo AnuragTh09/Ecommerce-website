@@ -3,13 +3,14 @@ import { IoLogoGithub } from "react-icons/io";
 import { FaLinkedin } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import '../index.css'
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className="footer-container  ">
+    <div className="footer-container fixed bottom-0 left-0 w-full bg-gray-800 text-white text-center ">
       <footer className="footer text-gray-600 body-font fixed-bottom w-full h-auto bg-white border border-gray-200">
         <div className="container p-6 mx-auto flex items-center sm:flex-row flex-col">
-          <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+          <Link className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
             <svg
               fill="none"
               stroke="currentColor"
@@ -22,7 +23,7 @@ const Footer = () => {
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
             </svg>
             <span className="ml-3 text-xl">E-commerce</span>
-          </a>
+          </Link>
           <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
             © 2024 E-commerce —
             <a
