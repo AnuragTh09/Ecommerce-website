@@ -5,7 +5,7 @@ import { IoMdHelpCircleOutline } from "react-icons/io";
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-[#F5F5F5] w-screen h-8 flex items-center justify-between p-2 shadow-md">
+    <div className="navbar bg-[#F5F5F5] w- h-8 flex items-center justify-between p-2 shadow-md">
       <div className="text-2xl p-2">🤸‍♂️</div>
       <div className="p-4">
         <ul className="flex  space-x-4 items-center">
