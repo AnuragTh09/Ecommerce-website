@@ -3,7 +3,6 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 // import { CiCirclePlus } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
 
-
 const ProductsProps = {
   productId: "",
   photo: "",
@@ -17,29 +16,60 @@ const server = "abcdefgh";
 
 const ProductCard = ({ productId, photo, name, price, stock, handler }) => {
   return (
-    <div className="w-screen h-screen p-4  ">
-      <div className="productCard  p-1 w-72 h-96 hover:bg-gray-300 ">
-        <div className="card  p-4 h-auto flex flex-col items-center space-y-1 rounded-md ">
-          <img
-            src={photo}
-            alt={name}
-            className="w-72 h-60 object-cover  border rounded-lg"
-          />
-          <p>{name}</p>
+    <div className="flex items-center justify-center ml-28 sm:ml-6">
+    <div className=" mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="card card-compact p-2 bg-base-100 shadow-xl border">
+        <figure>
+          <img src={photo} alt={name} className="w-60 h-40 object-cover " />
+        </figure>
+        <div className="card-body flex flex-col items-center justify-center space-y-3">
+          <h2 className="card-title text-xl font-extrabold">{name}</h2>
           <span className="flex flex-none items-center text-blue-400 text-lg font-semibold ">
             {" "}
             <FaIndianRupeeSign /> {price}{" "}
           </span>
-          <div className="absolute bottom-1/3  ">
-            <button 
-              className="text-lg p-2 bg-black text-white rounded-full hover:rotate-45  duration-300"
-              onClick={() => handler()}
-            >
-              <FaPlus />
-            </button>
+
+          <div className="card-actions justify-end">
+            <button className="btn bg-blue-400 p-2 rounded-lg text-white
+            ">Buy Now</button>
           </div>
         </div>
       </div>
+      <div className="card card-compact p-2 bg-base-100 shadow-xl border">
+        <figure>
+          <img src={photo} alt={name} className="w-60 h-40 object-cover " />
+        </figure>
+        <div className="card-body flex flex-col items-center justify-center space-y-3">
+          <h2 className="card-title text-xl font-extrabold">{name}</h2>
+          <span className="flex flex-none items-center text-blue-400 text-lg font-semibold ">
+            {" "}
+            <FaIndianRupeeSign /> {price}{" "}
+          </span>
+
+          <div className="card-actions justify-end">
+            <button className="btn bg-blue-400 p-2 rounded-lg text-white
+            ">Buy Now</button>
+          </div>
+        </div>
+      </div>
+     <div className="card card-compact p-2 bg-base-100 shadow-xl border">
+        <figure>
+          <img src={photo} alt={name} className="w-60 h-40 object-cover " />
+        </figure>
+        <div className="card-body flex flex-col items-center justify-center space-y-3">
+          <h2 className="card-title text-xl font-extrabold">{name}</h2>
+          <span className="flex flex-none items-center text-blue-400 text-lg font-semibold ">
+            {" "}
+            <FaIndianRupeeSign /> {price}{" "}
+          </span>
+
+          <div className="card-actions justify-end">
+            <button className="btn bg-blue-400 p-2 rounded-lg text-white
+            ">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   );
 };
