@@ -53,7 +53,7 @@ const Cart = () => {
   }, [couponCode]);
 
   return (
-    <div className=" mt-24">
+    <div className="cart-container ">
       <div className="flex flex-col lg:flex-row">
     <div className="cart min-w-full min-h-full flex flex-col md:flex-row  items-center justify-between gap-2 p-4 overflow-y-auto">
       {/* CART 1 */}
