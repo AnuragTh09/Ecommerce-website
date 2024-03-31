@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Carousel from '../components/Carousel'
 import { FaArrowRight } from "react-icons/fa";
 import ProductCard from '../components/ProductCard';
-
+import Footer from '../components/Footer.jsx'
 
 const Home = () => {
 
@@ -12,13 +12,13 @@ const Home = () => {
 
 
   return (
-    <div className='home '>
+    <div className='home h-screen '>
       <section>
         <Carousel />
       </section>
 
 
-    <h1 className='font-bold flex items-center justify-between p-5'>
+    <h1 className='font-bold flex items-center justify-between p-5 '>
         Latest Products
         <Link to='/search' className='findMore x'>
           <p className='flex items-center gap-1 hover:underline'> 
@@ -28,7 +28,7 @@ const Home = () => {
         </Link>
       </h1>
     
-    <div className='flex justify-center'>
+    <div className='flex justify-center '>
       
     <main className='w-full  flex  gap-4 '>
         <ProductCard
@@ -40,6 +40,9 @@ const Home = () => {
         photo="https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg"  />
       </main>
       
+    </div>
+    <div className='h-24 sm:h-auto'>
+      < Footer />
     </div>
       
     </div>
