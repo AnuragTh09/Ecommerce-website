@@ -11,11 +11,14 @@ const Home = lazy( () => import( "./pages/Home.jsx" ));
 const Cart = lazy( () => import( "./pages/Cart.jsx" )); 
 const Search = lazy( () => import( "./pages/Search.jsx" )); 
 const Shipping = lazy( () => import( "./pages/Shipping.jsx"));
-
+const LoginPage = lazy( () => import("./pages/LoginPage.jsx"));
+const ContactUs = lazy ( () => import("./pages/ContactUs.jsx"));
+const Order = lazy( () => import("./pages/Order.jsx"))
+const OrderDetails = lazy( () => import("./pages/OrderDetails.jsx"));
 const AppLayout = () => {
   return (
     <Router>
-      {/* <Navbar /> */}
+      {/* <Navbar  /> */}
       <Header />
       <Suspense fallback={<Loader />}>
       <Routes>
@@ -24,14 +27,22 @@ const AppLayout = () => {
         <Route path="/search" element={<Search />} />
 
         {/* login user routes  */}
-        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/login" element={<LoginPage />} />
+
+          <Route path="/shipping" element={<Shipping />} />
+          <Route path="/orders" element={<Order />} />
+
+        <Route path="/contact" element={<ContactUs />} />
+
+        <Route path="/order/:id" element={<OrderDetails />} />
 
 
 
       </Routes>
       </Suspense>
-     
+     <div className="h-24 sm:h-auto">
       <Footer />
+     </div>
     </Router>
   );
 };
