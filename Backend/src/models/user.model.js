@@ -30,6 +30,8 @@ const userSchema = new mongoose.Schema( {
         type: String,
         required: [true, "Please enter Password"],
         minLength: [8, "Password must be at least 5 characters"],
+        //hiding password field
+        select: false
     },
     photo:{
         type: String,
