@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
 
-const createUser = asyncHandler(async (req, res, next) => {
+export const createUser = asyncHandler(async (req, res, next) => {
   const { username, password, email, _id } = req.body;
 
   const existingUser = await User.findOne({
