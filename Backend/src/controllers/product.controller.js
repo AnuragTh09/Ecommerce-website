@@ -3,7 +3,10 @@ import { Product } from "../models/product.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
 import fs from "fs/promises";
+import { myCache } from "../app.js";
 
+
+// revalidate on new, update, delete product and on NewOrder
 export const newProduct = asyncHandler(async (req, res, next) => {
   const { name, price, stock, category } = req.body;
   const image = req.files?.image[0]?.path;
@@ -33,6 +36,9 @@ export const newProduct = asyncHandler(async (req, res, next) => {
     category: category.toLowerCase(),
   });
 
+  // Cache the newly created product
+  myCache.set(`product-${product._id}`, JSON.stringify(product));
+
   return res.status(201).json({
     success: true,
     message: `Product created successfully🚀`,
@@ -40,12 +46,22 @@ export const newProduct = asyncHandler(async (req, res, next) => {
   });
 });
 
+// revalidate on new, update, delete product and on NewOrder
 export const getLatestProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+  let products = [];
 
-  if (!products) {
-    throw new CustomError("Product not found", 400);
+  if (myCache.has("latest-products")) {
+    products = JSON.parse(myCache.get("latest-products").toString());
+  } else {
+    products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+
+    if (!products) {
+      throw new CustomError("Product not found", 400);
+    }
+    // Cache the result
+    myCache.set("latest-products", JSON.stringify(products));
   }
+
   return res.status(200).json({
     status: true,
     message: "Latest products are available",
@@ -53,8 +69,17 @@ export const getLatestProducts = asyncHandler(async (req, res) => {
   });
 });
 
+// revalidate on new, update, delete product and on NewOrder
 export const getAllCategories = asyncHandler(async (req, res) => {
-  const categories = await Product.distinct("category");
+  let categories;
+  if (myCache.has("categories")) {
+    categories = JSON.parse(myCache.get("latest-products").toString());
+  } else {
+    categories = await Product.distinct("category");
+
+    // Cache the result
+    myCache.set("latest-products", JSON.stringify(categories));
+  }
 
   return res.status(200).json({
     status: true,
@@ -63,8 +88,17 @@ export const getAllCategories = asyncHandler(async (req, res) => {
   });
 });
 
+// revalidate on new, update, delete product and on NewOrder
 export const getAdminProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  let products;
+  if (myCache.has("all-products")) {
+    products = JSON.parse(myCache.get("all-products").toString());
+  } else {
+    products = await Product.find({});
+
+    // cache the result
+    myCache.set("all-products", JSON.stringify(products));
+  }
 
   return res.status(200).json({
     status: true,
@@ -74,8 +108,22 @@ export const getAdminProducts = asyncHandler(async (req, res) => {
 });
 
 // single product
+// revalidate on new, update, delete product and on NewOrder
 export const getSingleProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  let product;
+  const id = req.params.id;
+
+  if (myCache.has(`product-${id}`)) {
+    product = JSON.parse(myCache.get(`product-${id}`).toString());
+  } else {
+    product = await Product.findById(id);
+
+    if (!product) {
+      throw new CustomError("Product not found", 400);
+    }
+    // Cache the result
+    myCache.set(`product-${id}`, JSON.stringify(product));
+  }
 
   return res.status(200).json({
     status: true,
@@ -160,8 +208,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
   if (category) baseQuery.category = category;
 
   const [products, filteredProducts] = await Promise.all([
-    Product
-      .find(baseQuery)
+    Product.find(baseQuery)
       .sort(sort && { price: sort === "asc" ? 1 : -1 })
       .limit(limit)
       .skip(skip),

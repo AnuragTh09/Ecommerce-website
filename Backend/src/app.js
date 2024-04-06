@@ -4,6 +4,9 @@ import cookieParser from 'cookie-parser'
 // importing Routes
 import userRoute from './routes/user.routes.js';
 import productRoute from './routes/products.routes.js'
+import  NodeCache from 'node-cache'
+
+export const myCache = new NodeCache();
 
 const app = express();
 app.use(cors({
