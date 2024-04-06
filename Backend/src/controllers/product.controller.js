@@ -1,3 +1,4 @@
+import { count } from "console";
 import { Product } from "../models/product.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
@@ -62,16 +63,6 @@ export const getAllCategories = asyncHandler(async (req, res) => {
   });
 });
 
-export const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find();
-
-  return res.status(200).json({
-    success: true,
-    message: "All products retrieved successfully",
-    products,
-  });
-});
-
 export const getAdminProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
 
@@ -131,10 +122,10 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     product.image = image; // Just assign the new image path directly
   }
 
-  if(name) product.name = name;
-  if(price) product.price= price;
-  if(stock) product.stock = stock;
-  if(category) product.category = category.toLowerCase();
+  if (name) product.name = name;
+  if (price) product.price = price;
+  if (stock) product.stock = stock;
+  if (category) product.category = category.toLowerCase();
 
   await product.save();
 
@@ -145,3 +136,44 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
   });
 });
 
+export const getAllProducts = asyncHandler(async (req, res) => {
+  const { search, sort, category, price } = req.query;
+
+  const page = Number(req.query.page) || 1;
+
+  const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
+  const skip = (page - 1) * limit;
+
+  const baseQuery = {};
+
+  if (search)
+    baseQuery.name = {
+      $regex: search,
+      $options: "i",
+    };
+
+  if (price)
+    baseQuery.price = {
+      $lte: Number(price),
+    };
+
+  if (category) baseQuery.category = category;
+
+  const [products, filteredProducts] = await Promise.all([
+    Product
+      .find(baseQuery)
+      .sort(sort && { price: sort === "asc" ? 1 : -1 })
+      .limit(limit)
+      .skip(skip),
+
+    Product.find(baseQuery),
+  ]);
+
+  const totalPage = Math.ceil(products.length / limit);
+
+  return res.status(200).json({
+    success: true,
+    message: "All products retrieved successfully",
+    products,
+  });
+});
