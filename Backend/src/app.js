@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import  NodeCache from 'node-cache'
+import morgan from 'morgan'
 // importing Routes
 import userRoute from './routes/user.routes.js';
 import productRoute from './routes/products.routes.js'
-import  NodeCache from 'node-cache'
+import orderRoute from './routes/order.routes.js'
+
+
 
 export const myCache = new NodeCache();
 
@@ -18,6 +22,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static("public"));
 app.use(cookieParser());
+app.use(morgan("dev")); // what req we made will be shown in the terminal with the use of morgan
 
 app.get('/', (req, res) => {
     res.send('API working with /api/v1')
@@ -26,6 +31,7 @@ app.get('/', (req, res) => {
 // using route
 app.use('/api/v1/user' , userRoute )
 app.use('/api/v1/product', productRoute)
+app.use('/api/v1/order', orderRoute)
 
 app.use('/uploads', express.static("uploads"))
 
