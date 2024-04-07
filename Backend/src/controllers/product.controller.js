@@ -109,7 +109,7 @@ export const getAdminProducts = asyncHandler(async (req, res) => {
 
 // single product
 // revalidate on new, update, delete product and on NewOrder
-export const getSingleProduct = asyncHandler(async (req, res) => {
+export const getSingleProduct = asyncHandler(async (req, res) => { 
   let product;
   const id = req.params.id;
 
