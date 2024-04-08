@@ -3,6 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
 import { Product } from "../models/product.model.js";
 import { myCache } from "../app.js";
+import { invalidateCache } from "../utils/invalidateCache.js";
 
 const reduceStock = async (orderItems) => {
   for (let i = 0; i < orderItems.length; i++) {
@@ -16,6 +17,82 @@ const reduceStock = async (orderItems) => {
     await product.save();
   }
 };
+
+export const myOrder = asyncHandler(async (req, res, next) => {
+  const { id: user } = req.query;
+  const key = `my-orders-${user}`;
+
+  let orders = [];
+
+  if (myCache.has(key)) {
+    orders = JSON.parse(myCache.get(key).toString());
+  } else {
+    orders = await Order.find({ user });
+
+    // cache the result
+    myCache.set(key, JSON.stringify(orders));
+  }
+
+  // Send success response
+  return res.status(200).json({
+    status: true,
+    message: "Your Orders are🚀 ",
+    orders,
+  });
+});
+
+export const allOrder = asyncHandler(async (req, res, next) => {
+  try {
+    // Fetch all orders from the database
+    const orders = await Order.find().populate("user", "name");
+
+    // Log the orders retrieved from the database
+    console.log("Orders:", orders);
+
+    // Send success response with orders
+    return res.status(200).json({
+      status: true,
+      message: "All Orders are🚀 ",
+      orders,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Failed to fetch orders",
+      error: error.message,
+    });
+  }
+});
+
+export const getSingleOrder = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const key = `order-${id}`;
+
+  let order;
+
+  if (myCache.has(key)) {
+    order = JSON.parse(myCache.get(key).toString());
+  } else {
+    order = await Order.findById(id).populate("user", "name");
+    // Cache the result
+    myCache.set(key, JSON.stringify(order));
+  }
+
+  // Check if order is empty or null
+  if (!order) {
+    throw new CustomError("Order not found", 404);
+  }
+
+  // Send success response
+  return res.status(200).json({
+    status: true,
+    message: "Your Order is🚀 ",
+    order,
+  });
+});
+
 
 export const newOrder = asyncHandler(async (req, res, next) => {
   const {
@@ -43,7 +120,7 @@ export const newOrder = asyncHandler(async (req, res, next) => {
     subtotal,
     tax,
     total,
-    user, // You might need to adjust this based on your schema
+    user,
   });
 
   if (existingOrder) {
@@ -75,50 +152,96 @@ export const newOrder = asyncHandler(async (req, res, next) => {
   });
 });
 
-export const myOrder = asyncHandler(async (req, res, next) => {
-  const { id: user } = req.query;
-  const key = `my-orders-${user}`;
+// export const processOrder = asyncHandler(async (req, res, next) => {
+//   const { id } = req.params;
 
-  let orders = [];
+//   // Find the order by ID
+//   const order = await Order.findById(id);
 
-  if (myCache.has(key)) {
-    orders = JSON.parse(myCache.get(key).toString());
-  } else {
-    orders = await Product.find({ user });
+//   if (!order) {
+//     throw new CustomError("Order not found", 404);
+//   }
 
-    // cache the result
-    myCache.set(key, JSON.stringify(orders));
+//   if (order.status === "Processing") {
+//     order.status = "Shipped";
+//   } else if (order.status === "Shipped") {
+//     order.status = "Delivered";
+//   }
+
+//   // Save the updated order
+//   await order.save();
+
+//   // Send success response
+//   return res.status(200).json({
+//     status: true,
+//     message: "Order Processed Successfully",
+//     order,
+//   });
+// });
+
+export const processOrder = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  // Find the order by ID
+  const order = await Order.findById(id);
+
+  if (!order) {
+    throw new CustomError("Order not found", 404);
   }
+
+  // Define product update function
+  const updateProductStatus = async (productId, newStatus) => {
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new CustomError("Product not found", 404);
+    }
+    // Update product status or any other properties
+    // Example: product.status = newStatus;
+    // Save the product
+    // await product.save();
+  };
+
+  if (order.status === "Processing") {
+    // Update product status for all order items
+    for (let i = 0; i < order.orderItems.length; i++) {
+      await updateProductStatus(order.orderItems[i].productId, "Shipped");
+    }
+    order.status = "Shipped";
+  } else if (order.status === "Shipped") {
+    // Update product status for all order items
+    for (let i = 0; i < order.orderItems.length; i++) {
+      await updateProductStatus(order.orderItems[i].productId, "Delivered");
+    }
+    order.status = "Delivered";
+  }
+
+  // Save the updated order
+  await order.save();
 
   // Send success response
   return res.status(200).json({
     status: true,
-    message: "Your Orders are🚀 ",
-    orders,
+    message: "Order Processed Successfully",
+    order,
   });
 });
 
-export const allOrder = asyncHandler(async (req, res, next) => {
-    const { id: user } = req.query;
-  
-    const key = user ? `all-orders-${user}` : 'all-orders';
-    let orders = [];
-  
-    if (myCache.has(key)) {
-      orders = JSON.parse(myCache.get(key).toString());
-    } else {
+export const deleteOrder = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
 
-        orders = await Order.find();
-  
-      // Cache the result
-      myCache.set(key, JSON.stringify(orders));
-    }
-  
-    // Send success response
-    return res.status(200).json({
-      status: true,
-      message: "All Orders are🚀 ",
-      orders,
-    });
+  // Find the order by ID
+  const order = await Order.findById(id);
+
+  if (!order) {
+    throw new CustomError("Order not found", 404);
+  }
+
+  // Delete the order
+  await Order.deleteOne({ _id: id });
+
+  // Send success response
+  return res.status(200).json({
+    status: true,
+    message: "Order Deleted Successfully",
   });
-  
+});
