@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import userRoute from './routes/user.routes.js';
 import productRoute from './routes/products.routes.js'
 import orderRoute from './routes/order.routes.js'
-
+import paymentRoute from './routes/coupon.routes.js'
 
 
 export const myCache = new NodeCache();
@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/user' , userRoute )
 app.use('/api/v1/product', productRoute)
 app.use('/api/v1/order', orderRoute)
+app.use('/api/v1/payment', paymentRoute)
 
 app.use('/uploads', express.static("uploads"))
 
