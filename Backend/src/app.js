@@ -3,15 +3,17 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import  NodeCache from 'node-cache'
 import morgan from 'morgan'
+import stripeKey from './config/index.config.js'
+import Stripe from 'stripe'
 // importing Routes
 import userRoute from './routes/user.routes.js';
 import productRoute from './routes/products.routes.js'
 import orderRoute from './routes/order.routes.js'
-import paymentRoute from './routes/coupon.routes.js'
+import paymentRoute from './routes/payment.routes.js'
 
 
 export const myCache = new NodeCache();
-
+export const stripe = new Stripe(stripeKey)
 const app = express();
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
