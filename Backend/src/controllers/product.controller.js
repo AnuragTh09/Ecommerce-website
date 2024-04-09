@@ -1,4 +1,3 @@
-import { count } from "console";
 import { Product } from "../models/product.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";

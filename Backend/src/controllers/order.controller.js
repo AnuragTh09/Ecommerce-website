@@ -3,7 +3,6 @@ import asyncHandler from "../utils/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
 import { Product } from "../models/product.model.js";
 import { myCache } from "../app.js";
-import { invalidateCache } from "../utils/invalidateCache.js";
 
 const reduceStock = async (orderItems) => {
   for (let i = 0; i < orderItems.length; i++) {
