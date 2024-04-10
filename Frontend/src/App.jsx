@@ -5,7 +5,7 @@ import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Loader from "./components/Loader.jsx";
 import Header from "./components/Header.jsx"
-
+import { Toaster } from "react-hot-toast"
 // lazy loading the components
 const Home = lazy( () => import( "./pages/Home.jsx" )); 
 const Cart = lazy( () => import( "./pages/Cart.jsx" )); 
@@ -40,6 +40,7 @@ const AppLayout = () => {
 
       </Routes>
       </Suspense>
+      <Toaster position="top-right" />
      <div className="h-24 sm:h-auto">
       <Footer />
      </div>

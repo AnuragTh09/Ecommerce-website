@@ -6,10 +6,9 @@ import { FaRegUser } from "react-icons/fa";
 import { IoBagOutline } from "react-icons/io5";
 import { HiOutlineHome } from "react-icons/hi2";
 import { MdHelpOutline } from "react-icons/md";
-
-
-
 import '../index.css'
+
+const user = {_id:"", role:""}
 
 import { Link } from "react-router-dom";
 const Header = () => {

@@ -1,8 +1,21 @@
 import React from "react";
 import Footer from "../components/Footer";
 import { FaGoogle, FaTwitter, FaGithub } from "react-icons/fa";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase.js";
 
 const LoginPage = () => {
+  const loginHandler = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+      // console.log(user);
+
+    } catch (error) {
+      toast.error("Sign In Failed ❌");
+    }
+  };
+
   return (
     <div className="login-container flex items-center justify-center h-screen mb-4">
       <div className="w-full max-w-md p-8 space-y-3 rounded-xl bg-white dark:bg-gray-50 dark:text-gray-800 shadow-xl">
@@ -13,7 +26,7 @@ const LoginPage = () => {
               Username
             </label>
             <input
-            required
+              required
               type="text"
               name="username"
               id="username"
@@ -52,22 +65,11 @@ const LoginPage = () => {
         </div>
         <div className="flex justify-center space-x-4">
           <button
+            onClick={loginHandler}
             aria-label="Log in with Google"
             className="ml-3 text-gray-500 flex items-center justify-center w-10 h-10 rounded-full hover:bg-black"
           >
             <FaGoogle className="w-5 h-5 text-blue-500" />
-          </button>
-          <button
-            aria-label="Log in with Twitter"
-            className="ml-3 text-gray-500 flex items-center justify-center w-10 h-10 rounded-full hover:bg-black"
-          >
-            <FaTwitter className="w-5 h-5 text-blue-500" />
-          </button>
-          <button
-            aria-label="Log in with GitHub"
-            className="ml-3 text-gray-500 flex items-center justify-center w-10 h-10 rounded-full hover:bg-black"
-          >
-            <FaGithub className="w-5 h-5 text-blue-500" />
           </button>
         </div>
         <p className="text-xs text-center sm:px-6 dark:text-gray-600">
